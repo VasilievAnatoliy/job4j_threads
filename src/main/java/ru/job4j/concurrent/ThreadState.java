@@ -7,8 +7,10 @@ public class ThreadState {
         System.out.println(first.getState());
         first.start();
         second.start();
-        while (first.getState() != Thread.State.TERMINATED) {
-            System.out.println(first.getState());
+        while (first.getState() != Thread.State.TERMINATED
+                && second.getState() != Thread.State.TERMINATED) {
+            System.out.printf("first thread - %s, second thread - %s", first.getState(), second.getState()
+                    + System.lineSeparator());
         }
         System.out.println("работа завершена");
     }
