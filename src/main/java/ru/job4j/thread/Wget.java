@@ -35,8 +35,8 @@ public class Wget implements Runnable {
             byte[] dateBuffer = new byte[1024];
             int downloadData = 0;
             int bytesRead;
+            long startTime = System.currentTimeMillis();
             while ((bytesRead = in.read(dateBuffer, 0, 1024)) != -1) {
-                long startTime = System.currentTimeMillis();
                 downloadData += bytesRead;
                 fileOutputStream.write(dateBuffer, 0, bytesRead);
                 long timeWork = System.currentTimeMillis() - startTime;
@@ -45,6 +45,7 @@ public class Wget implements Runnable {
                         Thread.sleep(1000 - timeWork);
                     }
                     downloadData = 0;
+                    startTime = System.currentTimeMillis();
                 }
             }
         } catch (IOException | InterruptedException e) {
