@@ -4,9 +4,10 @@ package ru.job4j.linked;
  * Immutable
  * 1. Все поля отмечены final.
  * 2. Состояние объекта не изменяется после создания объекта.
+ * 3. Запретить наследование final class.
  * @param <T>
  */
-public class Node<T> {
+public final class Node<T> {
     private final Node<T> next;
     private final T value;
 
