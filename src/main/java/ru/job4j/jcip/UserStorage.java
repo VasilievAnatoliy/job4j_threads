@@ -33,18 +33,14 @@ public class UserStorage {
 
     public synchronized boolean transfer(int fromId, int toId, int amount) {
         boolean rsl = false;
-        if (!users.containsKey(fromId) || !users.containsKey(toId) || amount <= 0) {
-            throw new IllegalArgumentException("data entered incorrectly");
-        }
-
         User from = users.get(fromId);
         User to = users.get(toId);
-        if (from.getAmount() >= amount) {
+        if (from != null && to != null && from.getAmount() >= amount) {
             from.setAmount(from.getAmount() - amount);
             to.setAmount(to.getAmount() + amount);
             rsl = true;
         } else {
-            throw new IllegalArgumentException("not enough money in the account");
+            throw new IllegalArgumentException("data entered incorrectly");
         }
         return rsl;
     }
