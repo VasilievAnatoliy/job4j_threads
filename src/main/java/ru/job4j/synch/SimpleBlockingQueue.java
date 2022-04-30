@@ -31,15 +31,11 @@ public class SimpleBlockingQueue<T> {
      * Если очередь заполнена полностью, то поток(и) Producer блокируется,
      * до тех пор пока Consumer не извлечет очередные данные.
      *
-     * @param value Data
+     * @param value - значение помещаемое в очередь.
      */
-    public synchronized void offer(T value) {
+    public synchronized void offer(T value) throws InterruptedException {
         while (queue.size() == capacity) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+               wait();
         }
         queue.offer(value);
         notifyAll();
@@ -62,5 +58,9 @@ public class SimpleBlockingQueue<T> {
         notifyAll();
         return queue.poll();
 
+    }
+
+    public synchronized boolean isEmpty() {
+        return queue.isEmpty();
     }
 }
