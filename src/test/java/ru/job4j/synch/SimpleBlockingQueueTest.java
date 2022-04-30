@@ -32,7 +32,11 @@ public class SimpleBlockingQueueTest {
         Thread consumer = new Thread(
                 () -> {
                     for (int i = 1; i <= 5; i++) {
-                        list.add(blockingQueue.poll());
+                        try {
+                            list.add(blockingQueue.poll());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
         );
@@ -67,7 +71,7 @@ public class SimpleBlockingQueueTest {
     @Test
     public void whenFetchAllThenGetIt() throws InterruptedException {
         final CopyOnWriteArrayList<Integer> buffer = new CopyOnWriteArrayList<>();
-        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(10);
+        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(3);
         Thread producer = new Thread(
                 () -> {
                     for (int i = 0; i < 8; i++) {

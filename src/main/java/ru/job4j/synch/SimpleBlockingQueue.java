@@ -46,13 +46,9 @@ public class SimpleBlockingQueue<T> {
      *
      * @return - Удалённое значение из очереди
      */
-    public synchronized T poll() {
+    public synchronized T poll() throws InterruptedException {
         while (queue.isEmpty()) {
-            try {
                 wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
         }
         notifyAll();
         return queue.poll();
