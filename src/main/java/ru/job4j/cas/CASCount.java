@@ -7,7 +7,11 @@ public class CASCount {
 
 
     public void increment() {
-        count.compareAndSet(get(), get() + 1);
+        int getCount;
+        do {
+            getCount = get();
+        } while (!count.compareAndSet(getCount, getCount + 1));
+
     }
 
     public int get() {
