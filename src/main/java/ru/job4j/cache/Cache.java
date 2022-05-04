@@ -12,13 +12,12 @@ public class Cache {
 
     public boolean update(Base model) {
         Base stored = memory.get(model.getId());
-        Base rsl = memory.computeIfPresent(stored.getId(), (k, v) -> {
-            if (stored.getVersion() != model.getVersion()) {
+        return memory.computeIfPresent(stored.getId(), (k, v) -> {
+            if (v.getVersion() != model.getVersion()) {
                 throw new OptimisticException("Versions are not equal");
             }
-            return new Base(stored.getId(), stored.getVersion() + 1);
-        });
-        return rsl != null;
+            return new Base(v.getId(), v.getVersion() + 1);
+        }) != null;
     }
 
     public void delete(Base model) {
@@ -27,14 +26,5 @@ public class Cache {
 
     public Map<Integer, Base> getMemory() {
         return Map.copyOf(memory);
-    }
-
-    public static void main(String[] args) {
-        Cache cache = new Cache();
-        cache.add(new Base(1, 1));
-        cache.add(new Base(2, 1));
-        cache.add(new Base(3, 1));
-        cache.update(cache.memory.get(1));
-        System.out.println(cache.memory.get(1));
     }
 }
