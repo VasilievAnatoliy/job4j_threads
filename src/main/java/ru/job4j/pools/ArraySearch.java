@@ -4,17 +4,17 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
 /**
- * Реализация параллельного поиска индекса в массиве объектов.
+ * Реализация параллельного поиска индекса в массиве объектов, с использованием ForkJoinPool.
  * В целях оптимизации, если размер массива не больше 10, используется обычный линейный поиск.
  */
 
-public class ArraySearch extends RecursiveTask<Integer> {
-    private final int[] array;
+public class ArraySearch<T> extends RecursiveTask<Integer> {
+    private final T[] array;
     private final int from;
     private final int to;
-    private final int find;
+    private final T find;
 
-    public ArraySearch(int[] array, int from, int to, int find) {
+    public ArraySearch(T[] array, int from, int to, T find) {
         this.array = array;
         this.from = from;
         this.to = to;
@@ -32,8 +32,8 @@ public class ArraySearch extends RecursiveTask<Integer> {
             return -1;
         }
         int mid = (from + to) / 2;
-        ArraySearch leftSearch = new ArraySearch(array, from, mid, find);
-        ArraySearch rightSearch = new ArraySearch(array, mid + 1, to, find);
+        ArraySearch<T> leftSearch = new ArraySearch(array, from, mid, find);
+        ArraySearch<T> rightSearch = new ArraySearch(array, mid + 1, to, find);
         leftSearch.fork();
         rightSearch.fork();
         int left = leftSearch.join();
@@ -41,8 +41,8 @@ public class ArraySearch extends RecursiveTask<Integer> {
         return Math.max(left, right);
     }
 
-    public static int search(int[] array, int find) {
+    public static <T> int search(T[] array, T find) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        return forkJoinPool.invoke(new ArraySearch(array, 0, array.length - 1, find));
+        return (int) forkJoinPool.invoke(new ArraySearch(array, 0, array.length - 1, find));
     }
 }
