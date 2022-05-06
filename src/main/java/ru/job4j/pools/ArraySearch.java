@@ -25,7 +25,7 @@ public class ArraySearch<T> extends RecursiveTask<Integer> {
     protected Integer compute() {
         if ((to - from) < 10) {
             for (int i = from; i <= to; i++) {
-                if (array[i] == find) {
+                if (find.equals(array[i])) {
                     return i;
                 }
             }
